@@ -11,7 +11,7 @@ protected:
     string name;
     string mainColor;
     string gender;
-    
+
 public:
     class ElementGraph* pointers[10];
 
@@ -20,21 +20,20 @@ public:
                  string name,
                  string mainColor,
                  string gender);
-    ~ElementGraph();
 
-    string getTypeAnimal(){return this->typeAnimal;};
-    string getRace(){return this->race;};
-    string getName(){return this->name;};
-    string getMainColor(){return this->mainColor;};
-    string getGender(){return this->gender;};
+    string getTypeAnimal() { return this->typeAnimal; };
+    string getRace() { return this->race; };
+    string getName() { return this->name; };
+    string getMainColor() { return this->mainColor; };
+    string getGender() { return this->gender; };
     int getCountChildGraphs();
 };
 
-ElementGraph :: ElementGraph(string typeAnimal,
-                             string race,
-                             string name,
-                             string mainColor,
-                             string gender)
+ElementGraph::ElementGraph(string typeAnimal,
+                           string race,
+                           string name,
+                           string mainColor,
+                           string gender)
 {
 
     this->typeAnimal = typeAnimal;
@@ -49,16 +48,11 @@ ElementGraph :: ElementGraph(string typeAnimal,
     }
 
     cout << "---------------------------------------------------------------" << endl;
-    cout << "               Создан граф с адресом {{"  << this << "}}       " << endl;
+    cout << "               Создан граф с адресом {{" << this << "}}       " << endl;
     cout << "---------------------------------------------------------------" << endl;
 }
 
-ElementGraph :: ~ElementGraph()
-{
-    delete this;
-}
-
-int ElementGraph :: getCountChildGraphs()
+int ElementGraph::getCountChildGraphs()
 {
     int count = 0;
 
@@ -79,28 +73,26 @@ protected:
     class ElementGraph* start;
     class ElementGraph* now;
     class ElementGraph* before;
-    class ElementGraph* startForCount;
 
 public:
     Graphs();
     ~Graphs();
 
     void create();
-    int amountGraphs();
+    int amountGraphs(class ElementGraph* graph);
     void addGraphTo(int to);
-    void removeGraph(class ElementGraph* now);
+    void removeGraph(class ElementGraph* graph);
     void clearPointers(class ElementGraph* deletedNow);
-    void updateNow(){this->now = this->before;};
-    void updateBefore(){this->before = this->now;};
-    void goToStart(){this->now = this->start;};
+    void updateNow() { this->now = this->before; };
+    void updateBefore() { this->before = this->now; };
+    void goToStart() { this->now = this->start; };
     void changePosition();
     void getValue();
-    void refresStart(class ElementGraph* start){this->start = start;};
+    void refrehStart(class ElementGraph* start) { this->start = start; };
 
-    class ElementGraph* getStart(){return this->start;}
-    class ElementGraph* getNow(){return this->now;}
-    class ElementGraph* getBefore(){return this->before;}
-    class ElementGraph* getStartForCount(){return this->startForCount;};
+    class ElementGraph* getStart() { return this->start; }
+    class ElementGraph* getNow() { return this->now; }
+    class ElementGraph* getBefore() { return this->before; }
 };
 
 Graphs :: ~Graphs()
@@ -108,18 +100,17 @@ Graphs :: ~Graphs()
     this->removeGraph(this->start);
 }
 
-Graphs :: Graphs()
+Graphs::Graphs()
 {
     this->start = NULL;
     this->now = NULL;
     this->before = NULL;
-    this->startForCount = NULL;
 }
 
-void Graphs :: create()
+void Graphs::create()
 {
     string typeAnimal, race, name,
-           mainColor, gender;
+        mainColor, gender;
 
     cout << "---------------------------------------------------------------" << endl;
     cout << "|                     Заполняем граф...                       |" << endl;
@@ -137,45 +128,38 @@ void Graphs :: create()
     cin >> gender;
 
     this->start = new ElementGraph(
-        typeAnimal, race, name, 
+        typeAnimal, race, name,
         mainColor, gender
     );
 
-    this->startForCount = this->start;
     this->now = this->start;
     this->before = this->start;
 }
 
-int Graphs :: amountGraphs()
+int Graphs::amountGraphs(class ElementGraph* graph)
 {
     int count = 0;
 
-    cout << this->start << endl;
-    if (this->start == NULL)
+    if (graph == NULL)
     {
-        cout << "Я ГЕЙ!" << endl;
         return 0;
     }
-    else if (this->start != NULL)
+    else if (graph != NULL)
     {
         count++;
     }
     for (int i = 0; i < 10; i++)
     {
-        cout << this->start->pointers[i] << endl;
-        this->start = this->start->pointers[i];
-        cout << count << endl;
-        count += amountGraphs();
-        cout << count << endl;
+        count += amountGraphs(graph->pointers[i]);
     }
     return count;
 }
 
-void Graphs :: addGraphTo(int to)
+void Graphs::addGraphTo(int to)
 {
     // to - 1 к старту, to - 2 к текущему графу
     string typeAnimal, race, name,
-           mainColor, gender;
+        mainColor, gender;
 
     cout << "---------------------------------------------------------------" << endl;
     cout << "|                     Заполняем граф...                       |" << endl;
@@ -193,7 +177,7 @@ void Graphs :: addGraphTo(int to)
     cin >> gender;
 
     class ElementGraph* freshGraph = new ElementGraph(
-        typeAnimal, race, name, 
+        typeAnimal, race, name,
         mainColor, gender
     );
 
@@ -208,13 +192,13 @@ void Graphs :: addGraphTo(int to)
             }
             if (i == 9)
             {
-                cout << "Добавление не возможно достигнуто максимальное количество дочерних графов!" << endl;    
+                cout << "Добавление не возможно достигнуто максимальное количество дочерних графов!" << endl;
             }
         }
     }
     else if (to == 2)
     {
-       for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (this->now->pointers[i] == NULL)
             {
@@ -223,27 +207,26 @@ void Graphs :: addGraphTo(int to)
             }
             if (i == 9)
             {
-                cout << "Добавление не возможно достигнуто максимальное количество дочерних графов!" << endl;    
+                cout << "Добавление не возможно достигнуто максимальное количество дочерних графов!" << endl;
             }
-        } 
+        }
     }
-    
+
 }
 
-void Graphs :: removeGraph(class ElementGraph* now)
+void Graphs::removeGraph(class ElementGraph* graph)
 {
-    if (this->now != NULL)
+    if (graph != NULL)
     {
         for (int i = 0; i < 10; i++)
         {
-            this->now = this->now->pointers[i];
-            removeGraph(this->now);
+            removeGraph(graph->pointers[i]);
         }
     }
-    delete this->now;
+    delete graph;
 }
 
-void Graphs :: clearPointers(class ElementGraph* deletedNow)
+void Graphs::clearPointers(class ElementGraph* deletedNow)
 {
     for (int i = 0; i < 10; i++)
     {
@@ -254,10 +237,10 @@ void Graphs :: clearPointers(class ElementGraph* deletedNow)
     }
 }
 
-void Graphs :: changePosition()
+void Graphs::changePosition()
 {
     cout << "---------------------------------------------------------------" << endl;
-    cout << "          Вы находитесь в {{" << this->now << "}} графе."       << endl;
+    cout << "          Вы находитесь в {{" << this->now << "}} графе." << endl;
     cout << "---------------------------------------------------------------" << endl;
 
     int countChildren = 0;
@@ -270,7 +253,7 @@ void Graphs :: changePosition()
     if (countChildren == 0)
     {
         cout << "---------------------------------------------------------------" << endl;
-        cout << "       У графа нет дочерних элементов переход не возможен!"      << endl;
+        cout << "       У графа нет дочерних элементов переход не возможен!" << endl;
         cout << "---------------------------------------------------------------" << endl;
         cout << "Вы хотите вернуться в начало графа('y' - да, 'n' - нет)?" << endl;
         string answer;
@@ -294,7 +277,7 @@ void Graphs :: changePosition()
         cout << "У графа 1 дочерний элемент, перейти к нему('y' - да, 'n' - нет, '1' - Вернуться в начало гарфа):" << endl;
         string answer;
         cin >> answer;
-        if (answer == "y") 
+        if (answer == "y")
         {
             this->now = this->now->pointers[0];
             cout << "---------------------------------------------------------------" << endl;
@@ -327,7 +310,7 @@ void Graphs :: changePosition()
         cout << "---------------------------------------------------------------" << endl;
         for (int i = 0; i < countChildren; i++)
         {
-            cout << i+1 << ")" << this->now->pointers[i] << endl;
+            cout << i + 1 << ")" << this->now->pointers[i] << endl;
             if (i + 1 == countChildren)
             {
                 i1 = i + 2;
@@ -337,7 +320,7 @@ void Graphs :: changePosition()
         cout << "---------------------------------------------------------------" << endl;
         cout << "Выберите граф: ";
         cin >> answer;
-        
+
         if (answer > 0 && answer <= countChildren)
         {
             if (answer == i1)
@@ -349,7 +332,7 @@ void Graphs :: changePosition()
                 cout << "---------------------------------------------------------------" << endl;
                 cout << "               Вы успешно поменяли граф!" << endl;
                 cout << "---------------------------------------------------------------" << endl;
-                this->now = this->now->pointers[answer-1];
+                this->now = this->now->pointers[answer - 1];
                 countChildren = 0;
             }
         }
@@ -367,17 +350,17 @@ void Graphs :: changePosition()
     }
 }
 
-void Graphs :: getValue()
+void Graphs::getValue()
 {
     cout << endl;
-    cout << "---------------------------------------------------------------"       << endl;
-    cout << "                      {{" << this->now << "}}                  "       << endl;
-    cout << "Тип домашнего животного: " << this->now->getTypeAnimal()               << endl;
-    cout << "Порода домашнего животного: " << this->now->getRace()                  << endl;
-    cout << "Имя домашнего животного: "  << this->now->getName()                    << endl;
+    cout << "---------------------------------------------------------------" << endl;
+    cout << "                      {{" << this->now << "}}                  " << endl;
+    cout << "Тип домашнего животного: " << this->now->getTypeAnimal() << endl;
+    cout << "Порода домашнего животного: " << this->now->getRace() << endl;
+    cout << "Имя домашнего животного: " << this->now->getName() << endl;
     cout << "Преоблодающий цвет домашнего животного: " << this->now->getMainColor() << endl;
-    cout << "Пол домашнего животного: " << this->now->getGender()                   << endl;
-    cout << "---------------------------------------------------------------"       << endl;
+    cout << "Пол домашнего животного: " << this->now->getGender() << endl;
+    cout << "---------------------------------------------------------------" << endl;
     cout << endl;
 }
 
